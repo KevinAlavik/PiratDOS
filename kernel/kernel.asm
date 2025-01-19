@@ -9,14 +9,8 @@ BITS    16
 ;  Kernel Entry         ;
 ; --------------------- ;
 start:
-    cli
-    xor ax, ax
-    mov ds, ax
-
-    mov al, 'A'
-    mov ah, 0x0E
-    mov bh, 0
-    int 0x10
+    mov ax, 'A'
+    call putchar
 
     mov si, boot_msg
     call puts
@@ -32,20 +26,41 @@ start:
 ; Arguments:
 ;   - ds:si, String pointer
 puts:
-    pusha
+    push si
+    push ax
+    push bx
 .loop:
     lodsb
-    test al, al
+    or al, al
     jz .done
-    mov ah, 0x0E
-    mov bh, 0
-    int 0x10
+    call putchar
     jmp .loop
 .done:
-    popa
+    pop bx
+    pop ax
+    pop si    
+    ret
+
+; Prints a single character to the screen, page number 0.
+; Arguments:
+;   - al: Character to print
+;   - bl: Attribute for the character
+putchar:
+    push ax
+    push bx
+    push cx
+
+    mov ah, 0x0E
+    mov bh, 0x00
+    mov cx, 1
+    int 0x10
+
+    pop cx
+    pop bx
+    pop ax
     ret
 
 ; --------------------- ;
 ;  Data                 ;
 ; --------------------- ;
-boot_msg: db 'PiratDOS V1.0 Alpha', 0x0A, 0x0D, 0
+boot_msg: db 'PiratDOS V1.0 Alpha', 0xA, 0xD, 0

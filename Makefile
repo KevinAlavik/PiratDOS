@@ -23,3 +23,12 @@ clean:
 
 run: $(OUT)
 	qemu-system-i386 -fda $(OUT) -debugcon stdio
+
+debug: $(OUT)
+	qemu-system-i386 -fda $(OUT) \
+		-S -gdb tcp::1234 \
+		-d cpu,exec,int \
+		-no-reboot -no-shutdown \
+		-debugcon stdio
+
+.PHONY: all clean run debug
