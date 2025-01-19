@@ -71,14 +71,6 @@ entry:
     mov dx, 0x184F       ; Bottom-right corner (row 24, column 79)
     int 0x10
 
-    ; Print the boot messages
-    mov si, msg_boot
-    call puts
-    mov si, msg_copyright
-    call puts
-    mov si, msg_seperator
-    call puts
-
     ; Read driver information (sectors per track and head)
     push es
     mov ah, 0x08
@@ -357,11 +349,6 @@ disk_reset:
 ; --------------- ;
 ;  Data           ;
 ; --------------- ;
-msg_boot:               db 'PiratDOS v1.0 Alpha', 0x0A, 0x0D, 0
-msg_copyright:          db 'Copyright (c) Kevin Alavik 2025', 0x0A, 0x0D, 0
-msg_seperator:
-    times 80 db '-'
-    db 0
 krnl_path:              db 'KRNL  SYS'
 kernel_cluster:         dw 0
 
