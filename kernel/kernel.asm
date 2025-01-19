@@ -18,14 +18,24 @@ init:
     %endrep
     print "PiratDOS v1.0 Alpha - Copyright (c) Kevin Alavik 2025"
     goto 0, 0
-    call start
+    
+    println "Insert program floppy and press ENTER..."
+    mov ah, 0
+    int 16h
+    jmp err_not_impl
 .halt:
     hlt
     jmp .halt
 
-start:
-    println ":)"
-    ret
+
+; --------------------- ;
+;  Error Functions      ;
+; --------------------- ;
+err_not_impl:
+    println "ERROR: 0xA001"
+    mov ah, 0
+    int 16h                      ; Wait for keypress
+    jmp 0xFFFF:0                ; Jump to beginning of BIOS, should reboot
 
 ; --------------------- ;
 ;  Utility Functions    ;
