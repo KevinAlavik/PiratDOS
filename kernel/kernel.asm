@@ -11,30 +11,25 @@ BITS 16
 ;  Kernel Entry         ;
 ; --------------------- ;
 init:
-    set_cursor 0
-    goto 0, 23
-    %rep 80
-        print "-"
-    %endrep
-    print "PiratDOS v1.0 Alpha - Copyright (c) Kevin Alavik 2025"
-    goto 0, 0
-    
+    call render_screen
     println "Insert program floppy and press ENTER..."
+.loop:
+    ; Wait for keypress
     mov ah, 0
     int 16h
-    jmp err_not_impl
-.halt:
-    hlt
-    jmp .halt
-
+    cmp al, 13                  ; Check if ASCII code of Enter key (13) was pressed
+    je .load_prgm_disk          ; Continue with loading the program disk
+    jne .loop
 
 ; --------------------- ;
-;  Error Functions      ;
+;  Program Disk Loading ;
 ; --------------------- ;
-err_not_impl:
-    println "ERROR: 0xA001"
+.load_prgm_disk:
+    call render_screen
+    println "ERROR: 0xA001 - Program Disk functionality is not implemented."
+    println "NOTE: Press any key to reboot"
     mov ah, 0
-    int 16h                      ; Wait for keypress
+    int 16h
     jmp 0xFFFF:0                ; Jump to beginning of BIOS, should reboot
 
 ; --------------------- ;
@@ -58,4 +53,16 @@ putchar:
     pop cx
     pop bx
     pop ax
+    ret
+
+; Renders the screen.
+render_screen:
+    clear_screen
+    set_cursor 0
+    goto 0, 23
+    %rep 80
+        print "-"
+    %endrep
+    print "PiratDOS v1.0 Alpha - Copyright (c) Kevin Alavik 2025"
+    goto 0, 0
     ret
