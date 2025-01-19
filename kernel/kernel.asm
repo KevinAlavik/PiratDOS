@@ -18,19 +18,27 @@ init:
     mov ah, 0
     int 16h
     cmp al, 13                  ; Check if ASCII code of Enter key (13) was pressed
-    je .load_prgm_disk          ; Continue with loading the program disk
+    je load_prgm_disk          ; Continue with loading the program disk
     jne .loop
 
 ; --------------------- ;
 ;  Program Disk Loading ;
 ; --------------------- ;
-.load_prgm_disk:
-    call render_screen
-    println "ERROR: 0xA001 - Program Disk functionality is not implemented."
-    println "NOTE: Press any key to reboot"
-    mov ah, 0
-    int 16h
-    jmp 0xFFFF:0                ; Jump to beginning of BIOS, should reboot
+load_prgm_disk:
+    mov dl, 0x01         ; DL: 0x01 = 2nd floppy drive
+    mov ah, 0x00
+    int 0x13
+
+    cmp ah, 0
+    je .disk_found
+    
+    error "0xA002", "Failed to load disk 2."
+    jmp $
+.disk_found:
+    println "Loading program disk..."
+    error "0xA001", "Program disk loading is unimplemented"
+    jmp $
+    
 
 ; --------------------- ;
 ;  Utility Functions    ;

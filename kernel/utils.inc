@@ -96,11 +96,25 @@
 
 ; printreg(name, reg)
 %macro printreg 2
+    ; Save registers
+    push ax
+    push bx
+    push cx
+    push dx
+
     print %1
     print ": "
-    _printnum %2
+    mov ax, %2
+    _printnum ax
     println ""
+
+    ; Restore registers
+    pop dx
+    pop cx
+    pop bx
+    pop ax
 %endmacro
+
 
 %macro set_cursor 1
     ; Save registers
@@ -176,6 +190,29 @@
     mov dh, %2
     mov dl, %1
     int 0x10
+
+    ; Restore registers
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+%endmacro
+
+%macro error 2
+    ; Save registers
+    push ax
+    push bx
+    push cx
+    push dx
+
+    ; Print the error code
+    print "ERROR: "
+    print %1
+    print " - "
+
+    ; Print the error message
+    print %2
+    println ""  ; Print newline
 
     ; Restore registers
     pop dx
