@@ -3,43 +3,33 @@
 ;  - Kernel entry point     ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-BITS    16
+BITS 16
+
+%include "utils.inc"
 
 ; --------------------- ;
 ;  Kernel Entry         ;
 ; --------------------- ;
-start:
-    mov ax, 'A'
-    call putchar
-
-    mov si, boot_msg
-    call puts
-.halt
+init:
+    set_cursor 0
+    goto 0, 23
+    %rep 80
+        print "-"
+    %endrep
+    print "PiratDOS v1.0 Alpha - Copyright (c) Kevin Alavik 2025"
+    goto 0, 0
+    call start
+.halt:
     hlt
     jmp .halt
+
+start:
+    println ":)"
+    ret
 
 ; --------------------- ;
 ;  Utility Functions    ;
 ; --------------------- ;
-
-; Prints a string to the screen, page number 0.
-; Arguments:
-;   - ds:si, String pointer
-puts:
-    push si
-    push ax
-    push bx
-.loop:
-    lodsb
-    or al, al
-    jz .done
-    call putchar
-    jmp .loop
-.done:
-    pop bx
-    pop ax
-    pop si    
-    ret
 
 ; Prints a single character to the screen, page number 0.
 ; Arguments:
@@ -59,8 +49,3 @@ putchar:
     pop bx
     pop ax
     ret
-
-; --------------------- ;
-;  Data                 ;
-; --------------------- ;
-boot_msg: db 'PiratDOS V1.0 Alpha', 0xA, 0xD, 0
