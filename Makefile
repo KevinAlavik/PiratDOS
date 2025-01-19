@@ -22,4 +22,4 @@ clean:
 	rm -f $(OUT)
 
 run: $(OUT)
-	qemu-system-i386 -fda $(OUT)
+	qemu-system-i386 -fda $(OUT) -debugcon stdio

@@ -12,12 +12,14 @@ start:
     cli
     xor ax, ax
     mov ds, ax
+
+    mov al, 'A'
+    mov ah, 0x0E
+    mov bh, 0
+    int 0x10
+
     mov si, boot_msg
     call puts
-    mov ah, 0x0E
-    mov al, 'A'
-    mov bh, 0x00
-    int 0x10
 .halt
     hlt
     jmp .halt
