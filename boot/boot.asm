@@ -33,7 +33,7 @@ bdb_large_sector_count:     dd 0
 ebr_drive_number:           db 0x00
                             db 0x00
 ebr_signature:              db 0x29
-ebr_volume_id:              db 0x12, 0x34, 0x56, 0x78
+ebr_volume_id:              db 0x00, 0x00, 0x00, 0x00
 ebr_volume_label:           db 'PIRATDOS   '
 ebr_system_id:              db 'FAT12   '
 
