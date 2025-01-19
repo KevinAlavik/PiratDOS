@@ -352,8 +352,8 @@ disk_reset:
 krnl_path:              db 'KRNL  SYS'
 kernel_cluster:         dw 0
 
-error_read_fail:        db 'ERR 0xC001', 0
-error_krnl_not_found:   db 'ERR 0xC002', 0
+error_read_fail:        db '0xC001', 0
+error_krnl_not_found:   db '0xC002', 0
 
 KERNEL_LOAD_SEGMENT     equ 0x2000
 KERNEL_LOAD_OFFSET      equ 0
