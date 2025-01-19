@@ -118,7 +118,7 @@ entry:
     mov di, buffer
 .search_kernel:
     mov si, krnl_path
-    mov cx, 11                          ; Compare up-to 11 characters
+    mov cx, 4                          ; Compare up-to 4 characters "KRNL"
     push di
     repe cmpsb
     pop di
@@ -189,7 +189,7 @@ entry:
     mov ds, ax
     mov es, ax
     jmp KERNEL_LOAD_SEGMENT:KERNEL_LOAD_OFFSET
-    jmp wait_key                        ; If kernel ever returns, just reboot on user input.
+    jmp krnl_return_error               ; If kernel ever returns, just reboot on user input.
     cli                                 ; Disable interrupts, this way CPU can't get out of "halt" state
     hlt
 .halt:
@@ -206,6 +206,10 @@ floppy_error:
     jmp wait_key
 kernel_not_found_error:
     mov si, error_krnl_not_found
+    call puts
+    jmp wait_key
+krnl_return_error:
+    mov si, krnl_faulty_return
     call puts
     jmp wait_key
 wait_key:
@@ -354,6 +358,7 @@ kernel_cluster:         dw 0
 
 error_read_fail:        db '0xC001', 0
 error_krnl_not_found:   db '0xC002', 0
+krnl_faulty_return:     db '0xC003', 0
 
 KERNEL_LOAD_SEGMENT     equ 0x2000
 KERNEL_LOAD_OFFSET      equ 0
