@@ -14,7 +14,6 @@ nop
 ; --------------- ;
 ;  FAT12 Header   ;
 ; --------------- ;
-
 bdb_oem:                    db 'MSWIN4.1'
 bdb_bytes_per_sector:       dw 512
 bdb_sectors_per_cluster:    db 1
@@ -360,7 +359,7 @@ error_krnl_not_found:   db '0xC002', 0
 krnl_faulty_return:     db '0xC003', 0
 
 KERNEL_LOAD_SEGMENT     equ 0x2000
-KERNEL_LOAD_OFFSET      equ 0
+KERNEL_LOAD_OFFSET      equ 0x0000
 
 DISK_READ_RETRY_COUNT   equ 3
 
