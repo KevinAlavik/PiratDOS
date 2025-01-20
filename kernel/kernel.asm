@@ -17,7 +17,7 @@ init:
     ; Wait for keypress
     mov ah, 0
     int 16h
-    cmp al, 13                  ; Check if ASCII code of Enter key (13) was pressed
+    cmp al, 13                 ; Check if ASCII code of Enter key (13) was pressed
     je load_prgm_disk          ; Continue with loading the program disk
     jne .loop
 
@@ -34,9 +34,8 @@ load_prgm_disk:
     jne .load_error
     
     call .load_fat12_header
-    ret
-.load_fat12_header:
     jmp $
+.load_fat12_header:
     ret
 .load_error:
     error "0xA002", "Failed to load disk 2."

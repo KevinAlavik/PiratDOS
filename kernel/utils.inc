@@ -164,12 +164,15 @@
     push bx
     push cx
     push dx
-
-    mov ah, 0x02
-    mov al, 0x00
-    mov cx, 0x1320
-    mov dx, 0x00
+    
+    mov ah, 0x06         ; Function 6: Scroll up
+    mov al, 0x00         ; Scroll entire screen
+    mov bh, 0x07         ; Attribute for blank spaces (white on black)
+    mov cx, 0x0000       ; Top-left corner (row 0, column 0)
+    mov dx, 0x184F       ; Bottom-right corner (row 24, column 79)
     int 0x10
+
+    goto 0, 0
 
     ; Restore registers
     pop dx
