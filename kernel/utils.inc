@@ -53,7 +53,7 @@
     pop ax
 %endmacro
 
-%macro _printnum 1
+%macro printnum 1
     ; Save registers
     push ax
     push bx
@@ -105,7 +105,7 @@
     print %1
     print ": "
     mov ax, %2
-    _printnum ax
+    printnum ax
     println ""
 
     ; Restore registers

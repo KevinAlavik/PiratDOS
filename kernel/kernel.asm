@@ -25,20 +25,22 @@ init:
 ;  Program Disk Loading ;
 ; --------------------- ;
 load_prgm_disk:
+    println "Loading program disk..."
     mov dl, 0x01         ; DL: 0x01 = 2nd floppy drive
     mov ah, 0x00
     int 0x13
 
     cmp ah, 0
-    je .disk_found
+    jne .load_error
     
+    call .load_fat12_header
+    ret
+.load_fat12_header:
+    jmp $
+    ret
+.load_error:
     error "0xA002", "Failed to load disk 2."
-    jmp $
-.disk_found:
-    println "Loading program disk..."
-    error "0xA001", "Program disk loading is unimplemented"
-    jmp $
-    
+    jmp error_handle
 
 ; --------------------- ;
 ;  Utility Functions    ;
@@ -62,6 +64,12 @@ putchar:
     pop bx
     pop ax
     ret
+
+error_handle:
+    println "An error has occurred press any button to reboot."
+    mov ah, 0
+    int 16h                     ; Wait for keypress
+    jmp 0xFFFF:0                ; Jump to beginning of BIOS, should reboot
 
 ; Renders the screen.
 render_screen:

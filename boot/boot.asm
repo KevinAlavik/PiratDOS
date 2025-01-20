@@ -217,7 +217,6 @@ wait_key:
     int 16h                     ; Wait for keypress
     jmp 0xFFFF:0                ; Jump to beginning of BIOS, should reboot
 
-
 ; --------------------- ;
 ;  Utility Functions    ;
 ; --------------------- ;
