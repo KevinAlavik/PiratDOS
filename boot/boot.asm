@@ -57,6 +57,10 @@ entry:
     ; Store the drive number
     mov [ebr_drive_number], dl
 
+    ; Enable A20
+    mov ax, 2401h
+    int 15h
+
     ; Setup the video mode, 80x25 text mode (0x03)
     mov ah, 0x00
     mov al, 0x03

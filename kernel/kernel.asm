@@ -37,7 +37,7 @@ load_prgm_disk:
     call .load_fat12_header
     println "Loaded FAT12 header!"
 
-    printnum test_thing
+    printnum [test_thing]
 
     jmp $
 .load_fat12_header:
