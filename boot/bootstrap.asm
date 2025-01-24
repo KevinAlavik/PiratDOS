@@ -173,7 +173,6 @@ BOOT:
     JMP $
 
 ; === Utility Functions ===
-
 ; *******************
 ; LBA_TO_CHS: Converts an LBA address to the CHS format
 ; Arguments:
