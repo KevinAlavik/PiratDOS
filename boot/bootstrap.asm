@@ -54,14 +54,32 @@ BOOT:
     MOV AL, 03h
     INT 10h
 
-    ; Output an 'A' to the display
-    MOV AH, 0Eh
-    MOV AL, 'A'
-    MOV BH, 00h
-    MOV BL, 07h
-    INT 10h
+    ; Output the boot message to the display using PRINTZ
+    LEA SI, [BOOT_MSG]
+    CALL PRINTZ
     JMP $
 
+; === Utility Functions ===
+
+; *******************
+; PRINTZ: Outputs an NULL-terminated string to the display.
+; Arguments: 
+;   - DS:SI - Pointer to the string to output
+; *******************
+PRINTZ:
+    MOV AH, 0Eh
+.LOOP:
+    LODSB
+    OR AL, AL
+    JZ .DONE
+    INT 10h
+    JMP .LOOP
+.DONE:
+    RET
+
+; === Data and options ===
+BOOT_MSG: DB '=== PiratDOS V1.0 Bootstrap ===', 0Ah, 0Dh, 00h
+
 ; === Boot signature and padding ===
-TIMES 510-($-$$) db 0
+TIMES 510-($-$$) DB 00h
 DW 0AA55h

@@ -19,6 +19,7 @@ $(BOOT_IMG): $(STAGE1)
 
 clean:
 	rm -f $(BOOT_IMG)
+	$(MAKE) -C $(BOOT) clean
 
 run: all
 	qemu-system-x86_64 -fda $(BOOT_IMG)
