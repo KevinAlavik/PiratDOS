@@ -16,7 +16,8 @@ $(BOOT_IMG): $(STAGE1) $(STAGE2)
 	dd if=/dev/zero of=$@ bs=512 count=2880
 	mkfs.fat -F 12 -n "PIRATBOOT" $@
 	dd if=$(STAGE1) of=$@ conv=notrunc bs=512 count=1
-	mcopy -i $@ $(STAGE2) ::LOADER.SYS
+	mcopy -i $@ $(STAGE2) ::loader.sys
+	mcopy -i $@ test.txt ::test.txt
 clean:
 	rm -f $(BOOT_IMG)
 	$(MAKE) -C $(BOOT) clean

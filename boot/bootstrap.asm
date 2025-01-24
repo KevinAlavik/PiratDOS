@@ -145,7 +145,7 @@ BOOT:
     MUL CX
     MOV CX, 2
     DIV CX                              ; AX = Index of entry in FAT, dx = cluster % 2
-
+    
     MOV SI, LOADER_BUFFER
     ADD SI, AX
     MOV AX, [DS:SI]
@@ -202,7 +202,7 @@ LBA_TO_CHS:
     SHL AH, 6
     OR CL, AH                           ; CL = CYLINDER (UPP 2 BITS)
 
-    POP DX
+    POP AX
     MOV DL, AL
     POP AX
     RET
@@ -224,7 +224,7 @@ DISK_READ:
 
     PUSH CX                             ; Store numbers of sectors to read on the stack
     CALL LBA_TO_CHS                     ; Calculate the CHS
-    POP CX                              ; CL = Sectors to read
+    POP AX                              ; CL = Sectors to read
 
     MOV AH, 02h
     MOV DI, DISK_READ_RETRY_COUNT
