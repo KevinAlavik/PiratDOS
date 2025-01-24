@@ -288,8 +288,8 @@ READ_ERR:
     JMP $
 
 ; === Data and options ===
-BOOT_MSG:                   DB '=== PiratDOS V1.0 Bootstrap ===', 0Ah, 0Dh, 00h
-READ_ERR_MSG:               DB 'ERR: Error when reading disk.', 0Ah, 0Dh, 00h
+BOOT_MSG:                   DB '=== PiratDOS V1.0 Alpha, Bootstrap ===', 0Ah, 0Dh, 00h
+READ_ERR_MSG:               DB 'ERROR: Error when reading disk.', 0Ah, 0Dh, 00h
 
 LOADER_FILE:                DB 'LOADER  SYS'
 LOADER_CLUSTER:             DW 0
