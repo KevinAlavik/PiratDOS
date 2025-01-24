@@ -64,7 +64,6 @@ RNDR_UI:
     POPA
     RET
 
-
 ; === Data and options ===
 ; *** UI ELEMENTS ***
 BOTTOM_BAR: 
