@@ -6,17 +6,17 @@
 BOOT := boot
 BOOT_IMG := boot.img
 STAGE1 := $(BOOT)/bootstrap.bin
+STAGE2 := $(BOOT)/loader.bin
 
 all: $(BOOT_IMG) 
-
-$(STAGE1): $(BOOT)
+$(STAGE1) $(STAGE2): $(BOOT)
 	$(MAKE) -C $(BOOT)
 
-$(BOOT_IMG): $(STAGE1)
+$(BOOT_IMG): $(STAGE1) $(STAGE2)
 	dd if=/dev/zero of=$@ bs=512 count=2880
 	mkfs.fat -F 12 -n "PIRATBOOT" $@
 	dd if=$(STAGE1) of=$@ conv=notrunc bs=512 count=1
-
+	mcopy -i $@ $(STAGE2) ::LOADER.SYS
 clean:
 	rm -f $(BOOT_IMG)
 	$(MAKE) -C $(BOOT) clean
