@@ -8,8 +8,7 @@ ORG     0000h
 
 ; === PiratDOS V1.0 Bootloader entry point ===
 ENTRY:
-    LEA SI, [MSG]
-    CALL PRINTZ
+    CALL RNDR_UI
 .HALT:
     HALT
     JMP $
@@ -22,6 +21,7 @@ ENTRY:
 ;   - DS:SI - Pointer to the string to output
 ; *******************
 PRINTZ:
+    PUSHA
     MOV AH, 0Eh
 .LOOP:
     LODSB
@@ -30,8 +30,51 @@ PRINTZ:
     INT 10h
     JMP .LOOP
 .DONE:
+    POPA
+    RET
+
+
+; *******************
+; (MACRO) GOTO: Places the mouse at (x,y)
+; Arguments: X, Y
+; *******************
+%macro GOTO 2
+    MOV AH, 02h
+    MOV BH, 00h
+    MOV DL, %1       ; X
+    MOV DH, %2       ; Y
+    INT 10h
+%endmacro
+
+; *******************
+; RNDR_UI: Renders the User Interface
+; Arguments: None
+; *******************
+RNDR_UI:
+    PUSHA
+    GOTO 0, 23
+    LEA SI, [SEPERATOR]
+    CALL PRINTZ
+    GOTO 0, 24
+    LEA SI, [BOTTOM_BAR]
+    CALL PRINTZ
+    GOTO 0, 0
+    LEA SI, [NOTE]
+    CALL PRINTZ
+    POPA
     RET
 
 
 ; === Data and options ===
-MSG: db 'Hello from the PiratDOS V1.0 Bootloader!', 0Ah, 0Dh, 0
+; *** UI ELEMENTS ***
+BOTTOM_BAR: 
+    DB 'PiratDOS v1.0 Alpha - Copyright (c) Kevin Alavik 2025'
+    TIMES 14 DB '.'
+    DB '(Bootloader)', 0
+SEPERATOR:
+    %rep 40
+    DB '-'
+    DB '*'
+    %endrep
+    DB 0
+NOTE: DB 'No bootable options available currently.', 0Ah, 0Dh, 0
