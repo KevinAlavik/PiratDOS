@@ -1,42 +1,26 @@
-OUT := piratdos.img
-STAGE1 := boot
-KRNL := kernel
-PRGRM_DISK := bundle.img
+# *****************************************************
+# PiratDOS V1.0 - Root Makefile
+# Written by Kevin Alavik <kevin@alavik.se>, 2025
+# *****************************************************
 
-all: $(OUT)
+BOOT := boot
+BOOT_IMG := boot.img
+STAGE1 := $(BOOT)/bootstrap.bin
 
-$(STAGE1)/boot.bin:
-	$(MAKE) -C $(STAGE1)
+all: $(BOOT_IMG) 
 
-$(KRNL)/krnl.sys:
-	$(MAKE) -C $(KRNL)
+$(STAGE1): $(BOOT)
+	$(MAKE) -C $(BOOT)
 
-# Create a standard 3.5" floppy disk for the OS
-$(OUT): $(STAGE1)/boot.bin $(KRNL)/krnl.sys
+$(BOOT_IMG): $(STAGE1)
 	dd if=/dev/zero of=$@ bs=512 count=2880
-	mkfs.fat -F 12 -n "PIRATDOS" $@
-	dd if=$(STAGE1)/boot.bin of=$@ conv=notrunc bs=512 count=1
-	mcopy -i $@ $(KRNL)/krnl.sys ::krnl.sys
-
-# Create a standard 3.5" floppy disk for bundled programs
-$(PRGRM_DISK): test.txt
-	dd if=/dev/zero of=$@ bs=512 count=2880
-	mkfs.fat -F 12 -n "PIRATAPPS" $@
-	mcopy -i $@ test.txt ::test.txt
+	mkfs.fat -F 12 -n "PIRATBOOT" $@
+	dd if=$(STAGE1) of=$@ conv=notrunc bs=512 count=1
 
 clean:
-	$(MAKE) -C $(STAGE1) clean
-	$(MAKE) -C $(KRNL) clean
-	rm -f $(OUT)
+	rm -f $(BOOT_IMG)
 
-run: $(OUT) $(PRGRM_DISK)
-	qemu-system-i386 -fda $(OUT) -fdb $(PRGRM_DISK)
+run: all
+	qemu-system-x86_64 -fda $(BOOT_IMG)
 
-debug: $(OUT) $(PRGRM_DISK)
-	qemu-system-i386 -fda $(OUT) \
-		-S -gdb tcp::1234 \
-		-d cpu,exec,int \
-		-no-reboot -no-shutdown \
-		-debugcon stdio
-
-.PHONY: all clean run debug
+.PHONY: all $(STAGE1) clean
