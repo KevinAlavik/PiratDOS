@@ -11,27 +11,27 @@ JMP_BOOT:                                                   ; Jump to boot code
                             JMP SHORT BOOT                  ;
                             NOP                             ;
 
-OEM_NAME:                   db 'MSWIN4.1'                   ; OEM name
-BYTES_PER_SECTOR:           dw 512                          ; Bytes per sector
-SECTORS_PER_CLUSTER:        db 1                            ; Sectors per cluster
-RESERVED_SECTORS:           dw 1                            ; Reserved sectors
-FAT_COUNT:                  db 2                            ; Number of FATs
-DIR_ENTRIES:                dw 00E0h                        ; Directory entries
-TOTAL_SECTORS:              dw 2880                         ; Total sectors
-MEDIA_DESC:                 db 00F0h                        ; Media descriptor
-SECTORS_PER_FAT_ENTRY:      dw 9                            ; Sectors per FAT
-SECTORS_PER_TRACK:          dw 18                           ; Sectors per track
-HEADS:                      dw 2                            ; Number of heads
-HIDDEN_SECTORS:             dd 0                            ; Hidden sectors
-LARGE_SECTOR_COUNT:         dd 0                            ; Large sector count
+OEM_NAME:                   DB 'MSWIN4.1'                   ; OEM name
+BYTES_PER_SECTOR:           DW 512                          ; Bytes per sector
+SECTORS_PER_CLUSTER:        DB 1                            ; Sectors per cluster
+RESERVED_SECTORS:           DW 1                            ; Reserved sectors
+FAT_COUNT:                  DB 2                            ; Number of FATs
+DIR_ENTRIES:                DW 00E0h                        ; Directory entries
+TOTAL_SECTORS:              DW 2880                         ; Total sectors
+MEDIA_DESC:                 DB 00F0h                        ; Media descriptor
+SECTORS_PER_FAT_ENTRY:      DW 9                            ; Sectors per FAT
+SECTORS_PER_TRACK:          DW 18                           ; Sectors per track
+HEADS:                      DW 2                            ; Number of heads
+HIDDEN_SECTORS:             DD 0                            ; Hidden sectors
+LARGE_SECTOR_COUNT:         DD 0                            ; Large sector count
 
 ; === Extended Boot Record (EBR) ===
-DRIVE_NUM:                  db 00h
-                            db 00h
-SIGNATURE:                  db 29h
-VOLUME_ID:                  db 00h, 00h, 00h, 00h
-VOLUME_LABEL:               db 'PIRATBOOT  '
-SYS_ID:                     db 'FAT12   '
+DRIVE_NUM:                  DB 00h
+                            DB 00h
+SIGNATURE:                  DB 29h
+VOLUME_ID:                  DB 00h, 00h, 00h, 00h
+VOLUME_LABEL:               DB 'PIRATBOOT  '
+SYS_ID:                     DB 'FAT12   '
 
 ; === PiratDOS V1.0 Bootstrap entry point ===
 BOOT:
@@ -84,7 +84,7 @@ BOOT:
     SHL AX, 5                           ; AX *= 32
     XOR DX, DX                          ; Zero out DX
     DIV WORD [BYTES_PER_SECTOR]         ; Sectors to read
-    TEST DX, DX                         ; If DX != 0 add 1
+    TEST DX, DX                         ; If DX != 0 aDD 1
     JZ .ROOT_AFTER
     INC AX
 .ROOT_AFTER:
@@ -111,7 +111,7 @@ BOOT:
     JL .SEARCH
     JMP READ_ERR
 .FOUND:
-    ; DI Should hold the address to the entry
+    ; DI Should hold the aDDress to the entry
     MOV AX, [DI + 26]                   ; First logical cluster field (offset 26)
     MOV [LOADER_CLUSTER], AX
 
@@ -180,9 +180,9 @@ BOOT:
 
 ; === Utility Functions ===
 ; *******************
-; LBA_TO_CHS: Converts an LBA address to the CHS format
+; LBA_TO_CHS: Converts an LBA aDDress to the CHS format
 ; Arguments:
-;   - AX: LBA address to convert
+;   - AX: LBA aDDress to convert
 ; Returns:
 ;   - CX (Bits 0-5): Sector
 ;   - CX (Bits 6-15): Cylinder
@@ -215,7 +215,7 @@ LBA_TO_CHS:
 ; *******************
 ; DISK_READ: Reads sectors from a disk
 ; Arguments:
-;   - AX: LBA Address
+;   - AX: LBA ADDress
 ;   - CL: Number of sectors to read (MAX 128)
 ;   - DL: Drive number
 ;   - ES:BX - Buffer to store the data
@@ -305,7 +305,7 @@ LOADER_OFFSET:              EQU 0000h
 
 DISK_READ_RETRY_COUNT:      EQU 10
 
-; === Boot signature and padding ===
+; === Boot signature and paDDing ===
 TIMES 510-($-$$) DB 00h
 DW 0AA55h
 LOADER_BUFFER:
