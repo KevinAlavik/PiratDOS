@@ -4,7 +4,6 @@
 ; *****************************************************
 
 BITS    16
-ORG     0000h
 
 ; === PiratDOS V1.0 Bootloader entry point ===
 ENTRY:
@@ -12,7 +11,7 @@ ENTRY:
     LEA SI, [NOTE]
     CALL PRINTZ
 .HALT:
-    HALT
+    HLT
     JMP $
 
 ; === Utility Functions ===
