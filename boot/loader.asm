@@ -9,10 +9,11 @@ ORG     0000h
 ; === PiratDOS V1.0 Bootloader entry point ===
 ENTRY:
     CALL RNDR_UI
+    LEA SI, [NOTE]
+    CALL PRINTZ
 .HALT:
     HALT
     JMP $
-
 
 ; === Utility Functions ===
 ; *******************
@@ -33,6 +34,24 @@ PRINTZ:
     POPA
     RET
 
+; *******************
+; PRINTN: Outputs BYTES of string to the display
+; Arguments: 
+;   - DS:SI - Pointer to the string to output
+;   - AX - Ammount of bytes to write
+; *******************
+PRINTN:
+    PUSHA
+    MOV CX, AX
+    MOV AH, 0Eh
+.LOOP:
+    JCXZ .DONE
+    LODSB
+    INT 10h
+    LOOP .LOOP
+.DONE:
+    POPA
+    RET
 
 ; *******************
 ; (MACRO) GOTO: Places the mouse at (x,y)
@@ -59,8 +78,6 @@ RNDR_UI:
     LEA SI, [BOTTOM_BAR]
     CALL PRINTZ
     GOTO 0, 0
-    LEA SI, [NOTE]
-    CALL PRINTZ
     POPA
     RET
 
