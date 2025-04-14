@@ -4,6 +4,13 @@
 ; *****************************************************
 
 BITS    16
+JMP     ENTRY
+
+; === Includes ===
+%INCLUDE "util/render.asm"
+%INCLUDE "util/ui.asm"
+%INCLUDE "util/error.asm"
+%INCLUDE "sys/disk.asm"
 
 ; === PiratDOS V1.0 Bootloader entry point ===
 ENTRY:
@@ -22,19 +29,14 @@ ENTRY:
     CALL DISK_READ
     JC DISK_READ_ERROR
 
-    ; Print out VOLUME_LABEL
+    ; Print out VOLUME_LABEL for debugging
+    PRINT "VolumeLabel: "
     LEA SI, [READ_BUFF + 2Bh]       ; READ_BUFF + Offset for VOLUME_LABEL in FAT12 header
     MOV AX, 11                      ; Length of VOLUME_LABEL section
     CALL PRINTN
 
     ; Halt the system, HALT is defined in error.asm
     JMP HALT
-
-; === Includes ===
-%INCLUDE "util/render.asm"
-%INCLUDE "util/ui.asm"
-%INCLUDE "util/error.asm"
-%INCLUDE "sys/disk.asm"
 
 ; === Data ===
 NOTE: DB 'No bootable options available currently.', 0Ah, 0Dh, 0

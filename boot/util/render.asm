@@ -67,7 +67,6 @@ PUTNUM:
     INC CX             ; Increment digit count
     TEST AX, AX
     JNZ .REVERSE_LOOP
-
 .DONE:
     ; Output digits in reverse order
     MOV AH, 0Eh
@@ -76,10 +75,8 @@ PUTNUM:
     MOV AL, DL         ; Move digit to AL
     INT 10h            ; Output the digit
     LOOP .PRINT_LOOP
-
     POPA
     RET
-
 .ZERO:
     ; Special case for zero
     MOV AL, '0'        ; ASCII for '0'
@@ -87,7 +84,6 @@ PUTNUM:
     INT 10h            ; Output '0'
     POPA
     RET
-
 
 ; === Utility Macros ===
 ; *******************
@@ -100,6 +96,53 @@ PUTNUM:
     MOV DL, %1       ; X
     MOV DH, %2       ; Y
     INT 10h
+%ENDMACRO
+
+; *******************
+; (MACRO) PRINT: Outputs a string directly to the screen
+; Arguments: The string to output
+; *******************
+%MACRO PRINT 1
+    %ASSIGN I 1
+    %STRLEN LEN %1
+    %REP LEN
+        %SUBSTR CHAR %1 I 1
+        %IF CHAR == 0
+            ; Don't emit anything for null characters
+        %ELSE
+            %SUBSTR NEXT_CHAR %1 I+1 1
+            %IF CHAR == 5Ch ; '\'
+                %IF NEXT_CHAR == 6Eh ; 'n'
+                    ; Handle \n as newline
+                    MOV AH, 0Eh
+                    MOV AL, 0Dh  ; Carriage Return
+                    INT 10h
+                    MOV AL, 0Ah  ; Line Feed
+                    INT 10h
+                    %ASSIGN I I + 2
+                %ELSE
+                    ; Print backslash and next char literally
+                    MOV AH, 0Eh
+                    MOV AL, 5Ch  ; '\'
+                    INT 10h
+                    %IF NEXT_CHAR != 0
+                        MOV AL, NEXT_CHAR
+                        INT 10h
+                        %ASSIGN I I + 2
+                    %ELSE
+                        ; No next character, just move by 1
+                        %ASSIGN I I + 1
+                    %ENDIF
+                %ENDIF
+            %ELSE
+                ; Print normal char
+                MOV AH, 0Eh
+                MOV AL, CHAR
+                INT 10h
+                %ASSIGN I I + 1
+            %ENDIF
+        %ENDIF
+    %ENDREP
 %ENDMACRO
 
 %ENDIF ; RENDER_ASM
