@@ -11,6 +11,7 @@ JMP     ENTRY
 %INCLUDE "util/ui.asm"
 %INCLUDE "util/error.asm"
 %INCLUDE "sys/disk.asm"
+%INCLUDE "sys/fat12.asm"
 
 ; === PiratDOS V1.0 Bootloader entry point ===
 ENTRY:
@@ -31,8 +32,8 @@ ENTRY:
 
     ; Print out VOLUME_LABEL for debugging
     PRINT "VolumeLabel: "
-    LEA SI, [READ_BUFF + 2Bh]       ; READ_BUFF + Offset for VOLUME_LABEL in FAT12 header
-    MOV AX, 11                      ; Length of VOLUME_LABEL section
+    LEA SI, [READ_BUFF + FAT12Header.volume_label]
+    MOV AX, 11 ; Size of VOLUME_LABEL in a FAT header
     CALL PRINTN
 
     ; Halt the system, HALT is defined in error.asm

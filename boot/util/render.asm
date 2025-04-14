@@ -48,6 +48,7 @@ PRINTN:
 ; PUTNUM: Outputs an unsigned integer as a string of digits
 ; Arguments:
 ;   - AX - The integer to output (16-bit value)
+; *******************
 PUTNUM:
     PUSHA
     MOV BX, 10         ; Divisor for base 10
