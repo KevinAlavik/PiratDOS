@@ -207,7 +207,7 @@ READ_ERR:
     JMP $
 
 ; === Includes ===
-%INCLUDE "disk.inc"
+%INCLUDE "sys/disk.asm"
 
 ; === Data and options ===
 BOOT_MSG:                   DB '=== PiratDOS V1.0 Alpha, Bootstrap ===', 0Ah, 0Dh, 00h

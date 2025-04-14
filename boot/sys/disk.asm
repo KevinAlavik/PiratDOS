@@ -3,6 +3,13 @@
 ; Written by Kevin Alavik <kevin@alavik.se>, 2025
 ; *****************************************************
 
+; !=!=!=!=!=!=!=!=!=!
+; NOTE: These functions might expect things like:
+;         - SECTORS_PER_TRACK
+;         - HEADS
+;       And similar to be defined.
+
+
 ; *******************
 ; LBA_TO_CHS: Converts an LBA aDDress to the CHS format
 ; Arguments:
@@ -15,7 +22,7 @@
 LBA_TO_CHS:
     PUSH AX
     PUSH DX
-    
+
     XOR DX, DX                          ; Zero out DX
     DIV WORD [SECTORS_PER_TRACK]        ; AX = LBA / SECTORS_PER_TRACK
                                         ; DX = LBA % SECTORS_PER_TRACK
@@ -64,7 +71,7 @@ DISK_READ:
     JNC .DONE
     POPA
     CALL DISK_RESET
-    DEC DI 
+    DEC DI
     TEST DI, DI
     JNZ .RETRY
 .FAIL:
@@ -81,7 +88,7 @@ DISK_READ:
 
 ; *******************
 ; DISK_RESET: Resets disk controller
-; Arguments: 
+; Arguments:
 ;   - DL: Drive number
 ; *******************
 DISK_RESET:
@@ -92,4 +99,5 @@ DISK_RESET:
     POPA
     RET
 
+; === Config ===
 DISK_READ_RETRY_COUNT:      EQU 10
