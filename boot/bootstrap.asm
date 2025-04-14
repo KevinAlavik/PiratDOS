@@ -165,11 +165,6 @@ BOOT:
     MOV AL, 03h
     INT 10h
 
-    ; Hide cursor
-    MOV AH, 0001h
-    MOV CX, 2607h
-    INT 10h
-
     ; Setup the env and jump to the Loader (stage2)
     MOV DL, [DRIVE_NUM]
     MOV AX, LOADER_SEGMENT

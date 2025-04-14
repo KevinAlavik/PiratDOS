@@ -22,7 +22,7 @@ clean:
 	rm -f $(BOOT_IMG)
 	$(MAKE) -C $(BOOT) clean
 
-run: all
+run: clean all
 	qemu-system-x86_64 -fda $(BOOT_IMG)
 
 .PHONY: all $(STAGE1) clean

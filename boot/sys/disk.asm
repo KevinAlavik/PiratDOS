@@ -3,6 +3,9 @@
 ; Written by Kevin Alavik <kevin@alavik.se>, 2025
 ; *****************************************************
 
+%IFNDEF DISK_ASM
+%DEFINE DISK_ASM
+
 ; !=!=!=!=!=!=!=!=!=!
 ; NOTE: These functions might expect things like:
 ;         - SECTORS_PER_TRACK
@@ -101,3 +104,5 @@ DISK_RESET:
 
 ; === Config ===
 DISK_READ_RETRY_COUNT:      EQU 10
+
+%ENDIF ; DISK_ASM

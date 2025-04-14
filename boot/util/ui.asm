@@ -3,7 +3,9 @@
 ; Written by Kevin Alavik <kevin@alavik.se>, 2025
 ; *****************************************************
 
-; === Generic Render Functions ===
+%IFNDEF UI_ASM
+%DEFINE UI_ASM
+
 ; *******************
 ; RNDR_UI: Renders the User Interface
 ; Arguments: None
@@ -31,3 +33,5 @@ SEPERATOR:
     DB '*'
     %endrep
     DB 0
+
+%ENDIF ; UI_ASM
