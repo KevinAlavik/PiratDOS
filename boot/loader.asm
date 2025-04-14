@@ -32,7 +32,7 @@ ENTRY:
 
     ; Print out VOLUME_LABEL for debugging
     PRINT "VolumeLabel: "
-    LEA SI, [READ_BUFF + FAT12Header.volume_label]
+    LEA SI, FAT12(READ_BUFF, volume_label)
     MOV AX, 11 ; Size of VOLUME_LABEL in a FAT header
     CALL PRINTN
 

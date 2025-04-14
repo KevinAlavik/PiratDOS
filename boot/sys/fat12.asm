@@ -29,4 +29,6 @@ STRUC FAT12Header
     .filesystem_type        RESB 8
 ENDSTRUC
 
+%define FAT12(x, y) x + FAT12Header.%+y
+
 %ENDIF ; FAT12_ASM
