@@ -8,7 +8,7 @@
 
 ; === Print Functions ===
 ; *******************
-; PRINTZ: Outputs an NULL-terminated string to the display
+; PRINTZ: Outputs a NULL-terminated string to the display
 ; Arguments:
 ;   - DS:SI - Pointer to the string to output
 ; *******************
@@ -29,7 +29,7 @@ PRINTZ:
 ; PRINTN: Outputs BYTES of string to the display
 ; Arguments:
 ;   - DS:SI - Pointer to the string to output
-;   - AX - Ammount of bytes to write
+;   - AX - Amount of bytes to write
 ; *******************
 PRINTN:
     PUSHA
@@ -86,9 +86,48 @@ PUTNUM:
     POPA
     RET
 
+; *******************
+; PUTCHAR: Outputs a single character to the display
+; Arguments:
+;   - AL - The character to output
+; *******************
+PUTCHAR:
+    PUSHA
+    MOV AH, 0Eh        ; BIOS teletype output
+    MOV BH, 0          ; Page 0
+    MOV BL, 07h        ; White on black
+    INT 10h            ; Output character in AL
+    POPA
+    RET
+
+; *******************
+; PUTHEX: Outputs a 16-bit value as a 4-digit hexadecimal number
+; Arguments:
+;   - AX - The 16-bit value to output
+; *******************
+PUTHEX:
+    PUSHA
+    MOV BX, AX         ; Save value
+    MOV CX, 4          ; 4 nibbles in 16-bit value
+.PUTHEX_LOOP:
+    ROL BX, 4          ; Get next nibble
+    MOV AL, BL
+    AND AL, 0x0F       ; Isolate nibble
+    CMP AL, 10
+    JB .DIGIT
+    ADD AL, 'A' - 10   ; Convert 10-15 to A-F
+    JMP .PRINT
+.DIGIT:
+    ADD AL, '0'        ; Convert 0-9 to '0'-'9'
+.PRINT:
+    CALL PUTCHAR       ; Print character in AL
+    LOOP .PUTHEX_LOOP
+    POPA
+    RET
+
 ; === Utility Macros ===
 ; *******************
-; (MACRO) GOTO: Places the mouse at (x,y)
+; (MACRO) GOTO: Places the cursor at (x,y)
 ; Arguments: X, Y
 ; *******************
 %MACRO GOTO 2

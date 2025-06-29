@@ -21,6 +21,8 @@ DISK_READ_ERROR:
 ; HALT: Halt the system
 ; *******************
 HALT:
+	CLI
+	HLT
     JMP HALT
 
 ; === Includes ===
