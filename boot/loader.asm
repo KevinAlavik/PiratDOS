@@ -31,13 +31,28 @@ ENTRY:
     JC DISK_READ_ERROR
 
     ; Print out VOLUME_LABEL for debugging
-    PRINT "VolumeLabel: "
-    LEA SI, FAT12(READ_BUFF, volume_label)
+    PRINT "Volume Label: "
+    LEA SI, [FAT12(READ_BUFF, volume_label)]
     MOV AX, 11 ; Size of VOLUME_LABEL in a FAT header
     CALL PRINTN
 
-    ; Halt the system, HALT is defined in error.asm
-    JMP HALT
+	PRINT "\n"
+
+	; Print out OEM_NAME for debugging
+	PRINT "OEM Name: "
+	LEA SI, [FAT12(READ_BUFF, oem_name)]
+	MOV AX, 8 ; Size of OEM_NAME in a FAT header
+	CALL PRINTN
+
+	PRINT "\n"
+
+	; Print out BYTES_PER_SECTOR for debugging
+	PRINT "Bytes Per Setor: "
+	MOV AX, [FAT12(READ_BUFF, bytes_per_sector)]
+	CALL PUTNUM
+
+    ; Halt the system
+	JMP HALT
 
 ; === Data ===
 NOTE: DB 'No bootable options available currently.', 0Ah, 0Dh, 0
